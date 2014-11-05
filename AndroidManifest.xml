@@ -26,7 +26,7 @@
         
         <activity
             android:name="com.example.myays.MyProjectList"
-            android:label="this is my project list">
+            android:label="this is my project list!!!">
             
             
         </activity>

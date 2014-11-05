@@ -1,22 +1,19 @@
 package com.example.myays;
 
 import android.app.ListActivity;
+import android.app.LoaderManager;
+import android.content.CursorLoader;
+import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
-import android.support.v4.widget.SimpleCursorAdapter;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView.LayoutParams;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-
-
-
+import android.widget.SimpleCursorAdapter;
 
 public class MyProjectList extends ListActivity implements LoaderManager.LoaderCallbacks<Cursor>{
 	
@@ -61,16 +58,9 @@ public class MyProjectList extends ListActivity implements LoaderManager.LoaderC
 
         // Prepare the loader.  Either re-connect with an existing one,
         // or start a new one.
-        getLoaderManager().initLoader(0, null, (android.app.LoaderManager.LoaderCallbacks<Cursor>) this);
+        getLoaderManager().initLoader(0, null, this);
     }
 
-    // Called when a new Loader needs to be created
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        // Now create and return a CursorLoader that will take care of
-        // creating a Cursor for the data being displayed.
-        return new CursorLoader(this, ContactsContract.Data.CONTENT_URI,
-                PROJECTION, SELECTION, null, null);
-    }
 
     // Called when a previously created loader has finished loading
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
@@ -87,6 +77,13 @@ public class MyProjectList extends ListActivity implements LoaderManager.LoaderC
         mAdapter.swapCursor(null);
     }
 
+    // Called when a new Loader needs to be created
+    public android.content.Loader<Cursor> onCreateLoader(int id, Bundle args) {
+    	// Now create and return a CursorLoader that will take care of
+    	// creating a Cursor for the data being displayed.
+    	return new CursorLoader(this, ContactsContract.Data.CONTENT_URI,
+    			PROJECTION, SELECTION, null, null);
+    }
     @Override 
     public void onListItemClick(ListView l, View v, int position, long id) {
         // Do something when a list item is clicked
