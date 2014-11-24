@@ -8,7 +8,7 @@
         android:id="@+id/tv_team_project_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="this is text view for team project list"
+        android:text="this is text view for discover project list"
         />
 
 </LinearLayout>

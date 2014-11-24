@@ -10,11 +10,13 @@ import android.view.ViewGroup;
 
 public class TeamProjectListFrag extends Fragment {
 
+	private final static String TAG = "lch";
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater,
 			@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 //		return super.onCreateView(inflater, container, savedInstanceState);
-		return inflater.inflate(R.layout.frag_team_project_list, container, true);
+		return inflater.inflate(R.layout.frag_team_project_list, container, false);
 	}
 	
 	
