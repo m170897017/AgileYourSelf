@@ -1,19 +1,25 @@
 package com.example.myays;
 
-import android.app.ActionBar;
-import android.app.ActionBar.Tab;
-import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.ShareActionProvider;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
 
 public class MainActivity extends ActionBarActivity implements
@@ -22,6 +28,12 @@ public class MainActivity extends ActionBarActivity implements
 	private static final String TAG = "lch";
 	private MyProjectListAdapter mProjectListAdapter;
 	private ShareActionProvider mShareActionProvider;
+	private DrawerLayout mDrawerLayout;
+	private ListView mDrawerList;
+	private ActionBarDrawerToggle mActionBarDrawerToggle;
+	private String[] mNavigationDrawerListStrings;
+	private CharSequence mTitle = "this is mTitle";
+	private CharSequence mDrawerTitle = "this is mDrawerTitle";
 
 	private ViewPager mViewPager;
 	private final static int TAB_NUM = 3;
@@ -31,21 +43,20 @@ public class MainActivity extends ActionBarActivity implements
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
 
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+
+		mTitle = mDrawerTitle = getTitle();
+		mViewPager = (ViewPager) findViewById(R.id.pager);
+
+		// add tab to action bar here
 		mProjectListAdapter = new MyProjectListAdapter(
 				getSupportFragmentManager());
-		final ActionBar mActionBar = getActionBar();
-		mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-//		mActionBar.show();
-		// Set up the ViewPager, attaching the adapter and setting up a listener
-		// for when the
-		// user swipes between sections.
-		// mViewPager = (ViewPager) findViewById(R.id.pager);
 
-		mViewPager = new ViewPager(this);
-		mViewPager.setId(R.id.pager);
-		setContentView(mViewPager);
+		final ActionBar mActionBar = getSupportActionBar();
+		mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+
 		mViewPager.setAdapter(mProjectListAdapter);
 		mViewPager
 				.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
@@ -66,6 +77,73 @@ public class MainActivity extends ActionBarActivity implements
 				.setTabListener(this));
 		mActionBar.addTab(mActionBar.newTab().setText("Discover")
 				.setTabListener(this));
+
+		// now start to set navigation drawer
+		mNavigationDrawerListStrings = getResources().getStringArray(
+				R.array.navigation_drawer_array);
+		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+		mDrawerList = (ListView) findViewById(R.id.left_drawer);
+
+		mDrawerList.setAdapter(new ArrayAdapter<String>(this,
+				R.layout.drawer_list_item, mNavigationDrawerListStrings));
+
+		mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+
+		mActionBarDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
+				R.drawable.ic_drawer, R.string.drawer_open,
+				R.string.drawer_close) {
+
+			@Override
+			public void onDrawerClosed(View drawerView) {
+				super.onDrawerClosed(drawerView);
+				getActionBar().setTitle(mTitle);
+			}
+
+			@Override
+			public void onDrawerOpened(View drawerView) {
+				super.onDrawerOpened(drawerView);
+				getActionBar().setTitle(mDrawerTitle);
+			}
+
+		};
+		mDrawerLayout.setDrawerListener(mActionBarDrawerToggle);
+
+		getActionBar().setDisplayHomeAsUpEnabled(true);
+		getActionBar().setHomeButtonEnabled(true);
+
+	}
+
+	private class DrawerItemClickListener implements
+			ListView.OnItemClickListener {
+		@Override
+		public void onItemClick(AdapterView parent, View view, int position,
+				long id) {
+			selectItem(position);
+			Toast.makeText(getApplicationContext(),
+					"you press position " + position, Toast.LENGTH_LONG).show();
+		}
+	}
+
+	/** Swaps fragments in the main content view */
+	private void selectItem(int position) {
+
+		// Fragment mLogInFrag = new LogInFrag();
+
+		Intent intent = new Intent(this, LogInActivity.class);
+		startActivity(intent);
+
+	}
+
+	protected void onPostCreate(Bundle savedInstanceState) {
+		super.onPostCreate(savedInstanceState);
+		// Sync the toggle state after onRestoreInstanceState has occurred.
+		mActionBarDrawerToggle.syncState();
+	}
+
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+		mActionBarDrawerToggle.onConfigurationChanged(newConfig);
 	}
 
 	@Override
@@ -85,23 +163,6 @@ public class MainActivity extends ActionBarActivity implements
 		Intent intent = new Intent(Intent.ACTION_SEND);
 		intent.setType("image/*");
 		return intent;
-	}
-
-	@Override
-	public void onTabSelected(Tab tab, FragmentTransaction ft) {
-		mViewPager.setCurrentItem(tab.getPosition());
-	}
-
-	@Override
-	public void onTabUnselected(Tab tab, FragmentTransaction ft) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void onTabReselected(Tab tab, FragmentTransaction ft) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -126,12 +187,20 @@ public class MainActivity extends ActionBarActivity implements
 			break;
 		}
 
+		if (mActionBarDrawerToggle.onOptionsItemSelected(item)) {
+			return true;
+		}
+
 		return super.onOptionsItemSelected(item);
 	}
 
+	/*
+	 * FragmentPagerAdapter has to use android.support.v4.app.FragmentManager as
+	 * its parameter
+	 */
 	public static class MyProjectListAdapter extends FragmentPagerAdapter {
 
-		public MyProjectListAdapter(android.support.v4.app.FragmentManager fm) {
+		public MyProjectListAdapter(FragmentManager fm) {
 			super(fm);
 		}
 
@@ -155,6 +224,27 @@ public class MainActivity extends ActionBarActivity implements
 		public int getCount() {
 			return TAB_NUM;
 		}
+
+	}
+
+	@Override
+	public void onTabReselected(android.support.v7.app.ActionBar.Tab arg0,
+			android.support.v4.app.FragmentTransaction arg1) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onTabSelected(android.support.v7.app.ActionBar.Tab arg0,
+			android.support.v4.app.FragmentTransaction arg1) {
+		mViewPager.setCurrentItem(arg0.getPosition());
+
+	}
+
+	@Override
+	public void onTabUnselected(android.support.v7.app.ActionBar.Tab arg0,
+			android.support.v4.app.FragmentTransaction arg1) {
+		// TODO Auto-generated method stub
 
 	}
 }

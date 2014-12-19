@@ -9,28 +9,31 @@
         android:targetSdkVersion="20" />
 
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppBaseTheme" >
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name="com.example.myays.LogInActivity"
+            android:icon="@drawable/ic_launcher"
+            android:label="Log In Avtivity"
+            android:parentActivityName="com.example.myays.MainActivity"
+            android:theme="@style/AppBaseTheme" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.myays.MainActivity" />
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        
-        <activity
-            android:name="com.example.myays.MyProjectList"
-            android:label="@string/app_name"
-            android:logo="@drawable/ic_action_dock" 
-            android:theme="@style/AppTheme">
-            
-            
         </activity>
     </application>
 

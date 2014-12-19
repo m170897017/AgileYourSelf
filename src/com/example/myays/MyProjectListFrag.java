@@ -9,13 +9,18 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.ListFragment;
+import android.util.Log;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
+//TODO use listfragment instead of fragment, it should work
 public class MyProjectListFrag extends Fragment {
 
 	private final static String TAG = "lch";
@@ -38,7 +43,6 @@ public class MyProjectListFrag extends Fragment {
 	 */
 	@Override
 	public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onActivityCreated(savedInstanceState);
 
 		FragmentManager mFragmentManager = getFragmentManager();
@@ -91,16 +95,64 @@ public class MyProjectListFrag extends Fragment {
 					R.layout.frag_my_project_list_1, from, to);
 			setListAdapter(adapter);
 			return super.onCreateView(inflater, container, savedInstanceState);
-
 		}
+		
+		
 
+		/*
+		 * register should be put here, after view created
+		 * @see android.support.v4.app.Fragment#onActivityCreated(android.os.Bundle)
+		 */
 		@Override
-		public void onListItemClick(ListView l, View v, int position, long id) {
+		public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+			super.onActivityCreated(savedInstanceState);
+			
+			registerForContextMenu(getListView());
+			
+			
+		}
 
-			Toast.makeText(getActivity(), v.toString(), Toast.LENGTH_LONG)
-					.show();
+
+
+		/*
+		 * This method will be invoked when item in listfragment is long pressed
+		 * to show menu
+		 * 
+		 * @see
+		 * android.support.v4.app.Fragment#onCreateContextMenu(android.view.
+		 * ContextMenu, android.view.View,
+		 * android.view.ContextMenu.ContextMenuInfo)
+		 */
+		@Override
+		public void onCreateContextMenu(ContextMenu menu, View v,
+				ContextMenuInfo menuInfo) {
+			
+			
+			Log.i(TAG, "long press!! start to show context menu!!");
+			super.onCreateContextMenu(menu, v, menuInfo);
+			MenuInflater menuInflater = getActivity().getMenuInflater();
+			menuInflater.inflate(R.menu.menu_for_item_in_my_project_list, menu);
 
 		}
+
+		/*
+		 * This method will be invoked when item in the menu is selected
+		 * 
+		 * @see
+		 * android.support.v4.app.Fragment#onContextItemSelected(android.view
+		 * .MenuItem)
+		 */
+		@Override
+		public boolean onContextItemSelected(MenuItem item) {
+			String infoString = item.getTitle().toString();
+
+			Toast.makeText(getActivity(), infoString, Toast.LENGTH_LONG).show();
+
+			// you can do something here with switch statement
+
+			return super.onContextItemSelected(item);
+		}
+
 	}
 
 }
