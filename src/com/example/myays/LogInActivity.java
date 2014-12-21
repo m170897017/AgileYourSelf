@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.myays.MyDBConfiguration.RegisEntry;
+import com.example.myays.dialogs.LogInConfirm;
 
 public class LogInActivity extends ActionBarActivity {
 
@@ -77,16 +78,25 @@ public class LogInActivity extends ActionBarActivity {
 				values.put(RegisEntry.COLUMN_NAME_CONTENT, passwordString);
 
 				mDatabase.insert(RegisEntry.TABLE_NAME, null, values);
-				Toast.makeText(
-						LogInActivity.this,
-						"Registe successfully. Now you can log in using your account!!",
-						Toast.LENGTH_LONG).show();
+
+				LogInConfirm regisConfirm = new LogInConfirm();
+				Bundle args = new Bundle();
+				args.putString("info", "You have singed up successfully!!!");
+				regisConfirm.setArguments(args);
+				regisConfirm.show(getSupportFragmentManager(), "regisConfirm");
+
+				// Toast.makeText(
+				// LogInActivity.this,
+				// "Registe successfully. Now you can log in using your account!!",
+				// Toast.LENGTH_LONG).show();
 
 			}
 
 			private void logInToDB() {
 
-				Log.i(TAG, "press the log in");
+				usernameString = usernameEditText.getText().toString();
+				passwordString = passwordEditText.getText().toString();
+
 				SQLiteDatabase mDatabaseRead = myDBHelper.getReadableDatabase();
 
 				String[] projection = { RegisEntry._ID,
@@ -95,25 +105,48 @@ public class LogInActivity extends ActionBarActivity {
 
 				};
 
+				// query the database to check if the username and password
+				// exist
+				String selection = RegisEntry.COLUMN_NAME_TITLE + " = '"
+						+ usernameString + "' and "
+						+ RegisEntry.COLUMN_NAME_CONTENT + " = '"
+						+ passwordString + "'";
 				Cursor cursor = mDatabaseRead.query(RegisEntry.TABLE_NAME,
-						projection, null, null, null, null, null);
-				int entriesNum = 0;
-				cursor.moveToFirst();
-				while (cursor.isAfterLast()==false) {
-					
-					String titleString = cursor.getString(cursor
-							.getColumnIndex(RegisEntry.COLUMN_NAME_TITLE));
-					String contentString = cursor.getString(cursor
-							.getColumnIndexOrThrow(RegisEntry.COLUMN_NAME_CONTENT));
-					Log.i(TAG, "we have title: " + titleString + " and content: "
-							+ contentString);
-					cursor.moveToNext();
-					entriesNum++;
+						projection, selection, null, null, null, null);
+				Bundle mBundle = new Bundle();
+				LogInConfirm mLogInConfirm = new LogInConfirm();
+
+				// if there is no match, moveToLast will return false, cursor is
+				// empty
+				if (cursor.moveToLast() == false) {
+					mBundle.putString("info",
+							"You are not in our db, please sign up first!!!");
+					mLogInConfirm.setArguments(mBundle);
+					mLogInConfirm
+							.show(getSupportFragmentManager(), "logInFail");
+				} else {
+					mBundle.putString("info",
+							"You have logged in successfully!!!");
+					mBundle.putString("back", "true");
+					mLogInConfirm.setArguments(mBundle);
+					mLogInConfirm.show(getSupportFragmentManager(),
+							"logInSuccess");
+
 				}
 
-				Log.i(TAG, "We have " + entriesNum + " entries!!");
-				
-				
+				/*
+				 * int entriesNum = 0; cursor.moveToFirst(); while
+				 * (cursor.isAfterLast() == false) {
+				 * 
+				 * String titleString = cursor.getString(cursor
+				 * .getColumnIndex(RegisEntry.COLUMN_NAME_TITLE)); String
+				 * contentString = cursor .getString(cursor
+				 * .getColumnIndexOrThrow(RegisEntry.COLUMN_NAME_CONTENT));
+				 * Log.i(TAG, "we have title: " + titleString + " and content: "
+				 * + contentString); cursor.moveToNext(); entriesNum++; }
+				 * 
+				 * Log.i(TAG, "We have " + entriesNum + " entries!!");
+				 */
 
 			}
 		};

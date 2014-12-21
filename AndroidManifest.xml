@@ -18,22 +18,38 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name" >
-        </activity>
-        <activity
-            android:name="com.example.myays.LogInActivity"
-            android:icon="@drawable/ic_launcher"
-            android:label="Log In Avtivity"
-            android:parentActivityName="com.example.myays.MainActivity"
-            android:theme="@style/AppBaseTheme" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.myays.MainActivity" />
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name="com.example.myays.LogInActivity"
+            android:icon="@drawable/ic_launcher"
+            android:label="Log In Avtivity"
+            android:theme="@style/AppBaseTheme" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.myays.MainActivity" />
+        </activity>
+        <activity
+            android:name="com.example.myays.HelpActivity"
+            android:icon="@drawable/ic_launcher"
+            android:label="Help Avtivity"
+            android:theme="@style/AppBaseTheme" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.myays.MainActivity" />
+        </activity>
+        <activity
+            android:name="com.example.myays.AboutUsActivity"
+            android:icon="@drawable/ic_launcher"
+            android:label="About Us Avtivity"
+            android:theme="@style/AppBaseTheme" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.myays.MainActivity" />
         </activity>
     </application>
 

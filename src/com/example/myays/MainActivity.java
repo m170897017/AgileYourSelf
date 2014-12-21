@@ -96,20 +96,21 @@ public class MainActivity extends ActionBarActivity implements
 			@Override
 			public void onDrawerClosed(View drawerView) {
 				super.onDrawerClosed(drawerView);
-				getActionBar().setTitle(mTitle);
+				getSupportActionBar().setTitle(mTitle);
 			}
 
 			@Override
 			public void onDrawerOpened(View drawerView) {
 				super.onDrawerOpened(drawerView);
-				getActionBar().setTitle(mDrawerTitle);
+				getSupportActionBar().setTitle(mDrawerTitle);
 			}
+			
 
 		};
 		mDrawerLayout.setDrawerListener(mActionBarDrawerToggle);
 
-		getActionBar().setDisplayHomeAsUpEnabled(true);
-		getActionBar().setHomeButtonEnabled(true);
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		getSupportActionBar().setHomeButtonEnabled(true);
 
 	}
 
@@ -119,18 +120,32 @@ public class MainActivity extends ActionBarActivity implements
 		public void onItemClick(AdapterView parent, View view, int position,
 				long id) {
 			selectItem(position);
-			Toast.makeText(getApplicationContext(),
-					"you press position " + position, Toast.LENGTH_LONG).show();
 		}
 	}
 
 	/** Swaps fragments in the main content view */
 	private void selectItem(int position) {
 
-		// Fragment mLogInFrag = new LogInFrag();
-
-		Intent intent = new Intent(this, LogInActivity.class);
-		startActivity(intent);
+		switch (position) {
+		case 0:
+			Intent intent = new Intent(this, LogInActivity.class);
+			startActivity(intent);
+			break;
+		case 1:
+			Intent intentHelp = new Intent(this, HelpActivity.class);
+			startActivity(intentHelp);
+			break;
+		case 2:
+			Intent intentAboutUs = new Intent(this, AboutUsActivity.class);
+			startActivity(intentAboutUs);
+			break;
+		
+		default:
+			Intent intentDefault = new Intent(this, LogInActivity.class);
+			startActivity(intentDefault);
+			break;
+		}
+		
 
 	}
 
