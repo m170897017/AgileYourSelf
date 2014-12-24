@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/ll_add_new_plan_1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <ImageView
+            android:id="@+id/im_add_new_plan_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:contentDescription="imageForAddNewPlanTitle"
+            android:src="@drawable/ic_action_add_to_queue" />
+
+        <TextView
+            android:id="@+id/tv_add_new_plan_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_weight="7"
+            android:text="Add a new plan"
+            android:textSize="20dp" >
+        </TextView>
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/et_add_new_plan_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Name of new plan" />
+
+    <TextView
+        android:id="@+id/tv_add_new_plan_start_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/tv_add_new_plan_end_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+        <EditText
+        android:id="@+id/et_add_new_plan_point"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="100" />
+        
+            <TextView
+        android:id="@+id/tv_add_new_plan_priority"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+        
+            <TextView
+        android:id="@+id/tv_add_new_plan_status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    
+            <EditText
+        android:id="@+id/et_add_new_plan_assign_to"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="eccglln" />
+            
+            <E
+    
+            
+</LinearLayout>

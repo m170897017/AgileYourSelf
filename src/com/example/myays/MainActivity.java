@@ -1,5 +1,7 @@
 package com.example.myays;
 
+import com.example.myays.dialogs.AddNewPlanDialog;
+
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -14,6 +16,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.ShareActionProvider;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -44,7 +47,7 @@ public class MainActivity extends ActionBarActivity implements
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 
-		super.onCreate(savedInstanceState);
+		super.onCreate(savedInstanceState); 
 		setContentView(R.layout.activity_main);
 
 		mTitle = mDrawerTitle = getTitle();
@@ -104,7 +107,6 @@ public class MainActivity extends ActionBarActivity implements
 				super.onDrawerOpened(drawerView);
 				getSupportActionBar().setTitle(mDrawerTitle);
 			}
-			
 
 		};
 		mDrawerLayout.setDrawerListener(mActionBarDrawerToggle);
@@ -113,6 +115,22 @@ public class MainActivity extends ActionBarActivity implements
 		getSupportActionBar().setHomeButtonEnabled(true);
 
 	}
+
+	
+	// when drawer is open, press back button will lead to main activity rather than quit app
+	@Override
+	public void onBackPressed() {
+		
+		if (mDrawerLayout.isDrawerOpen(Gravity.LEFT)) {	
+			mDrawerLayout.closeDrawer(Gravity.LEFT);
+		}
+		else {
+			super.onBackPressed();
+		}
+		
+	}
+
+
 
 	private class DrawerItemClickListener implements
 			ListView.OnItemClickListener {
@@ -139,13 +157,12 @@ public class MainActivity extends ActionBarActivity implements
 			Intent intentAboutUs = new Intent(this, AboutUsActivity.class);
 			startActivity(intentAboutUs);
 			break;
-		
+
 		default:
 			Intent intentDefault = new Intent(this, LogInActivity.class);
 			startActivity(intentDefault);
 			break;
 		}
-		
 
 	}
 
@@ -198,8 +215,13 @@ public class MainActivity extends ActionBarActivity implements
 			Toast.makeText(this, "you pressed settings", Toast.LENGTH_LONG)
 					.show();
 			break;
+		case R.id.action_add_new_plan:
+			AddNewPlanDialog mAddNewPlanDialog = new AddNewPlanDialog();
+			mAddNewPlanDialog.show(getSupportFragmentManager(), "addNewPlanDialog");
+			break;
 		default:
 			break;
+
 		}
 
 		if (mActionBarDrawerToggle.onOptionsItemSelected(item)) {

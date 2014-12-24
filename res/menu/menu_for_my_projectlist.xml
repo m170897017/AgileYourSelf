@@ -21,8 +21,9 @@
           
           <menu>
           
-              <item android:id="@+id/sub_menu_1"
-                  android:title="sub_menu_1"
+              <item android:id="@+id/action_add_new_plan"
+                  android:icon="@drawable/ic_action_add_to_queue"
+                  android:title="Add"
                   />
               <item android:id="@+id/sub_menu_2"
                   android:title="sub_menu_2"

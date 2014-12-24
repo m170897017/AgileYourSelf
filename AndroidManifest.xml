@@ -51,6 +51,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.myays.MainActivity" />
         </activity>
+        <activity
+            android:name="com.example.myays.AddNewPlanActivity"
+            android:icon="@drawable/ic_launcher"
+            android:label="Add New Plan Avtivity"
+            android:theme="@style/AppBaseTheme" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.myays.MainActivity" />
+        </activity>
     </application>
 
 </manifest>
