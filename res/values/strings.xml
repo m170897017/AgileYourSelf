@@ -18,4 +18,6 @@
         <item>About Us</item>
     </string-array>
 
+    <string name="add_new_plan_title_weight">3</string>
+    <string name="add_new_plan_content_weight">7</string>
 </resources>

@@ -16,22 +16,24 @@ public class LogInConfirm extends DialogFragment {
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 
 		AlertDialog.Builder mBuilder = new AlertDialog.Builder(getActivity());
-		
+
 		String inforString = getArguments().getString("info");
-		
-		mBuilder.setMessage(inforString)
-				.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+		mBuilder.setMessage(inforString).setPositiveButton("OK",
+				new DialogInterface.OnClickListener() {
 
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 
-						// invoke onBackPressed to return to parent activity, just
+						// invoke onBackPressed to return to parent activity,
+						// just
 						// like pressed back button
-						if (getArguments().getString("back")!=null && getArguments().getString("back").equalsIgnoreCase("true")){
+						if (getArguments().getString("back") != null
+								&& getArguments().getString("back")
+										.equalsIgnoreCase("true")) {
 							getActivity().onBackPressed();
 						}
-							
-						
+
 					}
 				});
 		return mBuilder.create();
