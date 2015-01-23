@@ -6,9 +6,11 @@ import java.util.Date;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -17,6 +19,9 @@ import android.widget.Button;
 import com.example.myays.R;
 
 public class AddNewPlanDialog extends DialogFragment {
+	
+	
+	private static final String TAG = "lch";
 
 	@Override
 	@NonNull
@@ -79,4 +84,13 @@ public class AddNewPlanDialog extends DialogFragment {
 
 		return mBuilder.create();
 	}
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+		Log.i(TAG, "ON ACTIVITY CALLED!!!");
+		super.onActivityResult(requestCode, resultCode, data);
+	}
+	
+	
 }

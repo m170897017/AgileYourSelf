@@ -2,6 +2,7 @@ package com.example.myays;
 
 import com.example.myays.dialogs.AddNewPlanDialog;
 
+import android.R.integer;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -22,6 +23,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -37,6 +39,9 @@ public class MainActivity extends ActionBarActivity implements
 	private String[] mNavigationDrawerListStrings;
 	private CharSequence mTitle = "this is mTitle";
 	private CharSequence mDrawerTitle = "this is mDrawerTitle";
+	private AddNewPlanDialog mAddNewPlanDialog;
+	private AddNewPlanDialog mAddNewPlanDialogForPriority;
+	private Button mPriorityButton;
 
 	private ViewPager mViewPager;
 	private final static int TAB_NUM = 3;
@@ -230,6 +235,19 @@ public class MainActivity extends ActionBarActivity implements
 
 		return super.onOptionsItemSelected(item);
 	}
+	
+	public void updatePriority(int selection){
+		
+		Log.i(TAG, "enter update priority");
+		mAddNewPlanDialogForPriority = (AddNewPlanDialog) getSupportFragmentManager().findFragmentByTag("addNewPlanDialog");
+		mPriorityButton = (Button) mAddNewPlanDialogForPriority.getView().findViewById(R.id.btn_add_new_plan_priority);
+		mPriorityButton.setText("pick"+selection);
+		Log.i(TAG, "finish update priority");
+		// TODO: getSupportFragmentManager().beginTransaction().replace(arg0, arg1)
+		
+	}
+	
+	
 
 	/*
 	 * FragmentPagerAdapter has to use android.support.v4.app.FragmentManager as
@@ -267,7 +285,7 @@ public class MainActivity extends ActionBarActivity implements
 	@Override
 	public void onTabReselected(android.support.v7.app.ActionBar.Tab arg0,
 			android.support.v4.app.FragmentTransaction arg1) {
-		// TODO Auto-generated method stub
+		// Auto-generated method stub
 
 	}
 
@@ -281,7 +299,7 @@ public class MainActivity extends ActionBarActivity implements
 	@Override
 	public void onTabUnselected(android.support.v7.app.ActionBar.Tab arg0,
 			android.support.v4.app.FragmentTransaction arg1) {
-		// TODO Auto-generated method stub
+		// Auto-generated method stub
 
 	}
 }
