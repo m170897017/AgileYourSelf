@@ -52,7 +52,7 @@ public class MainActivity extends ActionBarActivity implements
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 
-		super.onCreate(savedInstanceState); 
+		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
 		mTitle = mDrawerTitle = getTitle();
@@ -121,21 +121,18 @@ public class MainActivity extends ActionBarActivity implements
 
 	}
 
-	
-	// when drawer is open, press back button will lead to main activity rather than quit app
+	// when drawer is open, press back button will lead to main activity rather
+	// than quit app
 	@Override
 	public void onBackPressed() {
-		
-		if (mDrawerLayout.isDrawerOpen(Gravity.LEFT)) {	
+
+		if (mDrawerLayout.isDrawerOpen(Gravity.LEFT)) {
 			mDrawerLayout.closeDrawer(Gravity.LEFT);
-		}
-		else {
+		} else {
 			super.onBackPressed();
 		}
-		
+
 	}
-
-
 
 	private class DrawerItemClickListener implements
 			ListView.OnItemClickListener {
@@ -222,7 +219,8 @@ public class MainActivity extends ActionBarActivity implements
 			break;
 		case R.id.action_add_new_plan:
 			AddNewPlanDialog mAddNewPlanDialog = new AddNewPlanDialog();
-			mAddNewPlanDialog.show(getSupportFragmentManager(), "addNewPlanDialog");
+			mAddNewPlanDialog.show(getSupportFragmentManager(),
+					"addNewPlanDialog");
 			break;
 		default:
 			break;
@@ -235,19 +233,6 @@ public class MainActivity extends ActionBarActivity implements
 
 		return super.onOptionsItemSelected(item);
 	}
-	
-	public void updatePriority(int selection){
-		
-		Log.i(TAG, "enter update priority");
-		mAddNewPlanDialogForPriority = (AddNewPlanDialog) getSupportFragmentManager().findFragmentByTag("addNewPlanDialog");
-		mPriorityButton = (Button) mAddNewPlanDialogForPriority.getView().findViewById(R.id.btn_add_new_plan_priority);
-		mPriorityButton.setText("pick"+selection);
-		Log.i(TAG, "finish update priority");
-		// TODO: getSupportFragmentManager().beginTransaction().replace(arg0, arg1)
-		
-	}
-	
-	
 
 	/*
 	 * FragmentPagerAdapter has to use android.support.v4.app.FragmentManager as

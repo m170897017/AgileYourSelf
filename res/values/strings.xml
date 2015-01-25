@@ -12,12 +12,14 @@
     <string name="drawer_open">Open drawer</string>
     <string name="drawer_close">Close drawer</string>
     <string name="pick_priority">Pick Priority of Plan</string>
+    <string name="pick_status">Pick Status of Plan</string>
 
     <string-array name="navigation_drawer_array">
         <item>Log In</item>
         <item>Help</item>
         <item>About Us</item>
     </string-array>
+    
     <string-array name="add_new_plan_priority_array">
         <item>First</item>
         <item>Second</item>
@@ -26,6 +28,13 @@
         <item>Fifth</item>
     </string-array>
 
+    <string-array name="add_new_plan_status_array">
+        <item>Not started</item>
+        <item>On-going</item>
+        <item>Pending</item>
+        <item>Done</item>
+    </string-array>
+    
     <string name="add_new_plan_title_weight">3</string>
     <string name="add_new_plan_content_weight">7</string>
 
