@@ -1,16 +1,17 @@
 package com.example.myays.dialogs;
 
 import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import android.R.integer;
-import android.R.raw;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.provider.AlarmClock;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.util.Log;
@@ -18,12 +19,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.EditText;
 
 import com.example.myays.R;
+import com.example.myays.databases.MyDBConfiguration.AddNewPlanEntry;
+import com.example.myays.databases.MyDBHelper;
 
 public class AddNewPlanDialog extends DialogFragment {
 
 	private static final String TAG = "lch";
+	private MyDBHelper newPlanDbHelper;
 
 	@Override
 	@NonNull
@@ -31,6 +36,7 @@ public class AddNewPlanDialog extends DialogFragment {
 
 		AlertDialog.Builder mBuilder = new AlertDialog.Builder(getActivity());
 		LayoutInflater mInflater = getActivity().getLayoutInflater();
+		newPlanDbHelper = new MyDBHelper(getActivity(), AddNewPlanEntry.DB_NAME_STRING);
 
 		View mView = mInflater.inflate(R.layout.frag_add_new_plan_dialog, null);
 		Button mStartTimeButton = (Button) mView
@@ -119,13 +125,18 @@ public class AddNewPlanDialog extends DialogFragment {
 
 			@Override
 			public void onClick(View v) {
-				AddNewPlanTimeDialog mAddNewPlanTimeDialog = new AddNewPlanTimeDialog(
-						3);
-				mAddNewPlanTimeDialog.setTargetFragment(AddNewPlanDialog.this,
-						003);
-				mAddNewPlanTimeDialog.show(getActivity()
-						.getSupportFragmentManager(),
-						"addNewPlanAlarmTimeDialog");
+				
+//				AddNewPlanTimeDialog mAddNewPlanTimeDialog = new AddNewPlanTimeDialog(
+//						3);
+//				mAddNewPlanTimeDialog.setTargetFragment(AddNewPlanDialog.this,
+//						003);
+//				mAddNewPlanTimeDialog.show(getActivity()
+//						.getSupportFragmentManager(),
+//						"addNewPlanAlarmTimeDialog");
+				
+				Intent mIntent = new Intent(AlarmClock.ACTION_SET_ALARM);
+				startActivity(mIntent);
+				
 			}
 		});
 
@@ -135,7 +146,7 @@ public class AddNewPlanDialog extends DialogFragment {
 
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-						// TODO Auto-generated method stub
+						updateDB();
 
 					}
 				})
@@ -160,6 +171,85 @@ public class AddNewPlanDialog extends DialogFragment {
 		super.onActivityResult(requestCode, resultCode, data);
 	}
 
+	/*
+	 * Update database with input
+	 */
+	public void updateDB(){
+		
+		EditText mNameEditText = (EditText)getDialog().findViewById(R.id.et_add_new_plan_name);
+		String nameOfPlanString = mNameEditText.getText().toString();
+//		Log.i(TAG, "we get name: "+nameOfPlanString);
+		
+		Button mStartTimeButton = (Button)getDialog().findViewById(R.id.btn_add_new_plan_start_time);
+		String startTimeString = mStartTimeButton.getText().toString();
+//		Log.i(TAG, "we get start time: "+startTimeString);
+		
+		Button mEndTimeButton = (Button)getDialog().findViewById(R.id.btn_add_new_plan_end_time);
+		String endTimeString = mEndTimeButton.getText().toString();
+//		Log.i(TAG, "we get end time: "+endTimeString);
+		
+		EditText mPointEditText = (EditText)getDialog().findViewById(R.id.et_add_new_plan_point);
+		String pointString = mPointEditText.getText().toString();
+//		Log.i(TAG, "we get point: "+pointString);
+		
+		Button mPriorityButton = (Button)getDialog().findViewById(R.id.btn_add_new_plan_priority);
+		String priorityString = mPriorityButton.getText().toString();
+//		Log.i(TAG, "we get priority: "+priorityString);
+		
+		Button mStatusButton = (Button)getDialog().findViewById(R.id.btn_add_new_plan_status);
+		String statusString = mStatusButton.getText().toString();
+//		Log.i(TAG, "we get status: "+statusString);
+		
+		EditText mAssignToEditText = (EditText)getDialog().findViewById(R.id.et_add_new_plan_assign_to);
+		String assignToString = mAssignToEditText.getText().toString();
+//		Log.i(TAG, "we get assign to: "+assignToString);
+		
+		EditText mDescriptionEditText = (EditText)getDialog().findViewById(R.id.et_add_new_plan_description);
+		String descriptionString = mDescriptionEditText.getText().toString();
+//		Log.i(TAG, "we get description: "+descriptionString);
+		
+		EditText mNotesEditText = (EditText)getDialog().findViewById(R.id.et_add_new_plan_notes);
+		String noteString = mNotesEditText.getText().toString();
+//		Log.i(TAG, "we get notes: "+noteString);
+		
+		Button mAlarmButton = (Button)getDialog().findViewById(R.id.btn_add_new_plan_alarm);
+		String alarmString = mAlarmButton.getText().toString();
+//		Log.i(TAG, "we get alarm: "+alarmString);
+		
+		SQLiteDatabase newPlanDatabase = newPlanDbHelper.getWritableDatabase();
+		ContentValues mContentValues = new ContentValues();
+		
+		mContentValues.put(AddNewPlanEntry.COLUMN_NAME_NAME, nameOfPlanString);
+		mContentValues.put(AddNewPlanEntry.COLUMN_NAME_START_TIME, startTimeString);
+		mContentValues.put(AddNewPlanEntry.COLUMN_NAME_END_TIME, endTimeString);
+		mContentValues.put(AddNewPlanEntry.COLUMN_NAME_POINT, pointString);
+		mContentValues.put(AddNewPlanEntry.COLUMN_NAME_PRIORITY, priorityString);
+		mContentValues.put(AddNewPlanEntry.COLUMN_NAME_STATUS, statusString);
+		mContentValues.put(AddNewPlanEntry.COLUMN_NAME_ASSIGN_TO, assignToString);
+		mContentValues.put(AddNewPlanEntry.COLUMN_NAME_DESCRIPTION, descriptionString);
+		mContentValues.put(AddNewPlanEntry.COLUMN_NAME_NOTES, noteString);
+		mContentValues.put(AddNewPlanEntry.COLUMN_NAME_ALARM, alarmString);
+		
+		newPlanDatabase.insert(AddNewPlanEntry.TABLE_NAME, null, mContentValues);
+		
+		
+		// any record in database can be achieved here
+		SQLiteDatabase readNewPlanDatabase = newPlanDbHelper.getReadableDatabase();
+		
+		Cursor mCursor = readNewPlanDatabase.query(AddNewPlanEntry.TABLE_NAME, null, null, null, null, null, null);
+		mCursor.moveToFirst();
+		int total = mCursor.getColumnCount();
+		Log.i(TAG, "we have column in total: "+total);
+		int totalRows = mCursor.getCount();
+		Log.i(TAG, "we have rows: "+totalRows);
+		String resString = mCursor.getString(1);
+		Log.i(TAG, "we get column 1: "+resString);
+		mCursor.close();
+		
+		
+	}
+	
+	
 	/*
 	 * To update content of priority button in addNewPlanDialog fragment
 	 */
@@ -188,10 +278,6 @@ public class AddNewPlanDialog extends DialogFragment {
 
 		month++;
 		String currentDateString = year + "-" + month + "-" + day;
-		// SimpleDateFormat mSimpleDateFormat = new
-		// SimpleDateFormat("yyyy-MM-dd");
-		// Date selectionDateString =
-		// mSimpleDateFormat.parse(currentDateString);
 
 		switch (whichButton) {
 		case 1:

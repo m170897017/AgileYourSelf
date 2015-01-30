@@ -1,8 +1,5 @@
 package com.example.myays;
 
-import com.example.myays.dialogs.AddNewPlanDialog;
-
-import android.R.integer;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -26,6 +23,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import com.example.myays.dialogs.AddNewPlanDialog;
 
 public class MainActivity extends ActionBarActivity implements
 		ActionBar.TabListener {

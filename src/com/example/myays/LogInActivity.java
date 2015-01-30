@@ -1,6 +1,5 @@
 package com.example.myays;
 
-import android.R.integer;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -11,14 +10,15 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
-import com.example.myays.MyDBConfiguration.RegisEntry;
+import com.example.myays.databases.MyDBConfiguration.RegisEntry;
+import com.example.myays.databases.MyDBHelper;
 import com.example.myays.dialogs.LogInConfirm;
 
 public class LogInActivity extends ActionBarActivity {
 
 	private static String TAG = "lch";
+	
 
 	private Button buttonLogIn;
 	private Button buttonSignUP;
@@ -44,7 +44,7 @@ public class LogInActivity extends ActionBarActivity {
 		usernameEditText = (EditText) findViewById(R.id.username_in_log_in);
 		passwordEditText = (EditText) findViewById(R.id.password_in_log_in);
 
-		myDBHelper = new MyDBHelper(this);
+		myDBHelper = new MyDBHelper(this, RegisEntry.DB_NAME_STRING);
 
 		listener = new OnClickListener() {
 
@@ -85,10 +85,6 @@ public class LogInActivity extends ActionBarActivity {
 				regisConfirm.setArguments(args);
 				regisConfirm.show(getSupportFragmentManager(), "regisConfirm");
 
-				// Toast.makeText(
-				// LogInActivity.this,
-				// "Registe successfully. Now you can log in using your account!!",
-				// Toast.LENGTH_LONG).show();
 
 			}
 
