@@ -1,9 +1,14 @@
 package com.example.myays;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.text.DateFormat;
 
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -19,6 +24,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
+
+import com.example.myays.databases.MyDBConfiguration.AddNewPlanEntry;
+import com.example.myays.databases.MyDBHelper;
 
 //TODO use listfragment instead of fragment, it should work
 public class MyProjectListFrag extends Fragment {
@@ -57,6 +65,9 @@ public class MyProjectListFrag extends Fragment {
 	public static class MyProjectListFragment extends ListFragment {
 
 		private final static String TAG = "lch";
+		private MyDBHelper mAddNewPlanDBHelper;
+		
+
 		private String[] titles = new String[] { "title0", "title1", "title2" };
 		private String[] times = new String[] { "time0", "time1", "time2" };
 		private String[] infos = new String[] { "info0", "info1", "info2" };
@@ -67,18 +78,62 @@ public class MyProjectListFrag extends Fragment {
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
 
-			// ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-			// inflater.getContext(), android.R.layout.simple_list_item_1,
-			// numStrings);
-			// setListAdapter(adapter);
-			// return super.onCreateView(inflater, container,
-			// savedInstanceState);
-
 			List<HashMap<String, String>> mList = new ArrayList<HashMap<String, String>>();
+			
+			// get data from database first
+			mAddNewPlanDBHelper = new MyDBHelper(getActivity(),
+					AddNewPlanEntry.DB_NAME_STRING);
+			SQLiteDatabase mDatabase = mAddNewPlanDBHelper
+					.getReadableDatabase();
+			String[] projectionStrings = { AddNewPlanEntry._ID,
+					AddNewPlanEntry.COLUMN_NAME_DESCRIPTION,
+					AddNewPlanEntry.COLUMN_NAME_START_TIME,
+					AddNewPlanEntry.COLUMN_NAME_END_TIME,
+					AddNewPlanEntry.COLUMN_NAME_PRIORITY,
+					AddNewPlanEntry.COLUMN_NAME_ASSIGN_TO, };
+
+			Cursor mCursor = mDatabase.query(AddNewPlanEntry.TABLE_NAME,
+					projectionStrings, null, null, null, null, null);
+
+			mCursor.moveToFirst();
+			while (mCursor.isAfterLast() != true) {
+				HashMap<String, String> mHashMap = new HashMap<String, String>();
+				
+				mHashMap.put("description", mCursor.getString(mCursor.getColumnIndex(AddNewPlanEntry.COLUMN_NAME_DESCRIPTION)));
+				mHashMap.put("priority", mCursor.getString(mCursor.getColumnIndex(AddNewPlanEntry.COLUMN_NAME_PRIORITY)));
+				mHashMap.put("assignTo", mCursor.getString(mCursor.getColumnIndex(AddNewPlanEntry.COLUMN_NAME_ASSIGN_TO)));
+				
+				String startTimeString = mCursor.getString(mCursor.getColumnIndex(AddNewPlanEntry.COLUMN_NAME_START_TIME));
+				String endTimeString = mCursor.getString(mCursor.getColumnIndex(AddNewPlanEntry.COLUMN_NAME_END_TIME));
+				
+				SimpleDateFormat mDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+				Date mStartDate = mDateFormat.parse(startTimeString);
+				Date mEndDate = mDateFormat.parse(endTimeString);
+				long daysInTotal = mEndDate.getTime() - mStartDate.getTime();
+				String currentTimeString = DateFormat.getDateInstance().format(
+						new Date());
+				Date mCurrentDate = mDateFormat.parse(currentTimeString);
+				long datsPassed = mCurrentDate.getTime() - mStartDate.getTime();
+				
+				
+				
+				
+				mHashMap.put("description", mCursor.getString(mCursor.getColumnIndex(AddNewPlanEntry.COLUMN_NAME_DESCRIPTION)));
+				
+				for (String i : projectionStrings) {
+					String resultString = mCursor.getString(mCursor
+							.getColumnIndex(i));
+					
+					
+				}
+				mCursor.moveToNext();
+
+			}
+			
+
 
 			for (int i = 0; i < 3; i++) {
 
-				HashMap<String, String> mHashMap = new HashMap<String, String>();
 				mHashMap.put("nickname", titles[i]);
 				mHashMap.put("rightnickname", times[i]);
 				mHashMap.put("imageview_selector", Integer.toString(logos[i]));
@@ -96,23 +151,20 @@ public class MyProjectListFrag extends Fragment {
 			setListAdapter(adapter);
 			return super.onCreateView(inflater, container, savedInstanceState);
 		}
-		
-		
 
 		/*
 		 * register should be put here, after view created
-		 * @see android.support.v4.app.Fragment#onActivityCreated(android.os.Bundle)
+		 * 
+		 * @see
+		 * android.support.v4.app.Fragment#onActivityCreated(android.os.Bundle)
 		 */
 		@Override
 		public void onActivityCreated(@Nullable Bundle savedInstanceState) {
 			super.onActivityCreated(savedInstanceState);
-			
+
 			registerForContextMenu(getListView());
-			
-			
+
 		}
-
-
 
 		/*
 		 * This method will be invoked when item in listfragment is long pressed
@@ -126,8 +178,7 @@ public class MyProjectListFrag extends Fragment {
 		@Override
 		public void onCreateContextMenu(ContextMenu menu, View v,
 				ContextMenuInfo menuInfo) {
-			
-			
+
 			Log.i(TAG, "long press!! start to show context menu!!");
 			super.onCreateContextMenu(menu, v, menuInfo);
 			MenuInflater menuInflater = getActivity().getMenuInflater();

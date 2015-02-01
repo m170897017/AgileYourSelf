@@ -246,7 +246,7 @@ public class MainActivity extends ActionBarActivity implements
 		@Override
 		public Fragment getItem(int item_num) {
 
-			Log.i(TAG, "enter getItem");
+//			Log.i(TAG, "enter getItem");
 			switch (item_num) {
 			case MY_PROJECT_LIST_ID:
 				return new MyProjectListFrag();
