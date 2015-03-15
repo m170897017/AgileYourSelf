@@ -85,6 +85,7 @@ public class AddNewPlanDialog extends DialogFragment {
         });
 
         // get current time and assign to three buttons
+        // get current time and assign to three buttons
         String currentTimeString = DateFormat.getDateInstance().format(
                 new Date());
         mStartTimeButton.setText(currentTimeString);

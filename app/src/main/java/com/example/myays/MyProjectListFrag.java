@@ -1,6 +1,10 @@
 package com.example.myays;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -66,6 +70,7 @@ public class MyProjectListFrag extends Fragment {
         private ArrayList<String> startTimes = new ArrayList<String>();
         private ArrayList<String> endTimes = new ArrayList<String>();
         private ArrayList<String> priorities = new ArrayList<String>();
+        private ArrayList<String> percentages = new ArrayList<String>();
 
         private int[] logos = new int[]{R.drawable.ic_action_cloud,
                 R.drawable.ic_action_dock, R.drawable.ic_launcher};
@@ -103,6 +108,38 @@ public class MyProjectListFrag extends Fragment {
 
             int entryNum = mCursor.getCount();
             List<HashMap<String, String>> mList = new ArrayList<HashMap<String, String>>();
+
+            DateFormat mDateFormat = new SimpleDateFormat("yyyy-mm-dd");
+            for (int i = 0; i < entryNum; i++){
+                Date startTime = null;
+                Date endTime = null;
+                try {
+                    startTime = mDateFormat.parse(startTimes.get(i));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                Log.i(TAG, "start time date object is: "+startTime);
+                try {
+                    endTime = mDateFormat.parse(endTimes.get(i));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                Log.i(TAG, "end time date object is: "+endTime);
+                Long diff = endTime.getTime() - startTime.getTime();
+                Log.i(TAG, "diff time is : "+diff);
+                Date currentTime = new Date();
+                Log.i(TAG, "current time is: "+currentTime);
+                if (currentTime.after(endTime)){
+                    percentages.add("100%");
+                }
+                else if (currentTime.before(startTime)){
+                    percentages.add("0%");
+                }
+                else {
+
+                    percentages.add("0%");
+                }
+            }
 
             for (int i = 0; i < entryNum; i++) {
 

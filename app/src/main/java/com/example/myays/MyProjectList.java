@@ -23,6 +23,9 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+/*
+this program is for test only
+ */
 public class MyProjectList extends ListActivity implements LoaderManager.LoaderCallbacks<Cursor>{
 	
 	private final static String TAG_STRING = "lch";
