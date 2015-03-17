@@ -127,14 +127,6 @@ public class AddNewPlanDialog extends DialogFragment {
             @Override
             public void onClick(View v) {
 
-//				AddNewPlanTimeDialog mAddNewPlanTimeDialog = new AddNewPlanTimeDialog(
-//						3);
-//				mAddNewPlanTimeDialog.setTargetFragment(AddNewPlanDialog.this,
-//						003);
-//				mAddNewPlanTimeDialog.show(getActivity()
-//						.getSupportFragmentManager(),
-//						"addNewPlanAlarmTimeDialog");
-
                 Intent mIntent = new Intent(AlarmClock.ACTION_SET_ALARM);
                 startActivity(mIntent);
 

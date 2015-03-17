@@ -109,35 +109,33 @@ public class MyProjectListFrag extends Fragment {
             int entryNum = mCursor.getCount();
             List<HashMap<String, String>> mList = new ArrayList<HashMap<String, String>>();
 
-            DateFormat mDateFormat = new SimpleDateFormat("yyyy-mm-dd");
+            DateFormat mDateFormat = new SimpleDateFormat("yyyy-MM-dd");
             for (int i = 0; i < entryNum; i++){
                 Date startTime = null;
                 Date endTime = null;
+                int mPercentage;
                 try {
                     startTime = mDateFormat.parse(startTimes.get(i));
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-                Log.i(TAG, "start time date object is: "+startTime);
                 try {
                     endTime = mDateFormat.parse(endTimes.get(i));
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-                Log.i(TAG, "end time date object is: "+endTime);
-                Long diff = endTime.getTime() - startTime.getTime();
-                Log.i(TAG, "diff time is : "+diff);
+                Long diffSE = endTime.getTime() - startTime.getTime();
                 Date currentTime = new Date();
-                Log.i(TAG, "current time is: "+currentTime);
-                if (currentTime.after(endTime)){
+                Long diffCS = currentTime.getTime() - startTime.getTime();
+                if (currentTime.before(startTime) || endTime.before(startTime)){
+                    percentages.add("0%");
+                }
+                else if (currentTime.after(endTime)){
                     percentages.add("100%");
                 }
-                else if (currentTime.before(startTime)){
-                    percentages.add("0%");
-                }
                 else {
-
-                    percentages.add("0%");
+                    mPercentage = (int) (diffCS * 100 / diffSE);
+                    percentages.add(mPercentage+"%");
                 }
             }
 
@@ -145,7 +143,7 @@ public class MyProjectListFrag extends Fragment {
 
                 HashMap<String, String> mHashMap = new HashMap<String, String>();
                 mHashMap.put("description", descriptions.get(i));
-                mHashMap.put("percentage", startTimes.get(i));
+                mHashMap.put("percentage", percentages.get(i));
                 mHashMap.put("priority", priorities.get(i));
                 mList.add(mHashMap);
             }
