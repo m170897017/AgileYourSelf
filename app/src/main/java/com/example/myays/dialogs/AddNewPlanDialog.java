@@ -1,8 +1,5 @@
 package com.example.myays.dialogs;
 
-import java.text.DateFormat;
-import java.util.Date;
-
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.ContentValues;
@@ -21,9 +18,14 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.myays.MainActivity;
+import com.example.myays.MyProjectListFrag;
 import com.example.myays.R;
 import com.example.myays.databases.MyDBConfiguration.AddNewPlanEntry;
 import com.example.myays.databases.MyDBHelper;
+
+import java.text.DateFormat;
+import java.util.Date;
 
 public class AddNewPlanDialog extends DialogFragment {
 
@@ -134,25 +136,41 @@ public class AddNewPlanDialog extends DialogFragment {
         });
 
         // set final view and final buttons
-        mBuilder.setView(mView)
+        AlertDialog.Builder builder = mBuilder.setView(mView)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
 
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        updateDB();
-
-                    }
-                })
-                .setNegativeButton("Cancel",
-                        new DialogInterface.OnClickListener() {
-
                             @Override
-                            public void onClick(DialogInterface dialog,
-                                                int which) {
-                                // TODO Auto-generated method stub
+                            public void onClick(DialogInterface dialog, int which) {
+                                updateDB();
+                                MainActivity mActivity = (MainActivity) getActivity();
+                                mActivity.refreshViewPager();
+
+//                                try {
+//
+//                                    Log.i(TAG, "get fragmanager success!!!!");
+//                                    ((MyProjectListFrag) getTargetFragment()).updateListView();
+//                                } catch (Exception e) {
+//                                    e.printStackTrace();
+//                                }
 
                             }
-                        });
+                        }
+
+                )
+                .
+
+                        setNegativeButton("Cancel",
+                                new DialogInterface.OnClickListener() {
+
+                                    @Override
+                                    public void onClick(DialogInterface dialog,
+                                                        int which) {
+                                        // TODO Auto-generated method stub
+
+                                    }
+                                }
+
+                        );
 
         return mBuilder.create();
     }

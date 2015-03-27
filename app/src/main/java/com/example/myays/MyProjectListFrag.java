@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -35,6 +36,8 @@ public class MyProjectListFrag extends Fragment {
     private final static String TAG = "lch";
 
     private MyProjectListFragment myProjectListFragment;
+    private FragmentManager mFragmentManager;
+    private FragmentTransaction mFragmentTransaction;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -54,7 +57,7 @@ public class MyProjectListFrag extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        FragmentManager mFragmentManager = getFragmentManager();
+        mFragmentManager = getFragmentManager();
         myProjectListFragment = new MyProjectListFragment();
         mFragmentManager
                 .beginTransaction()
@@ -71,7 +74,10 @@ public class MyProjectListFrag extends Fragment {
         private ArrayList<String> endTimes = new ArrayList<String>();
         private ArrayList<String> priorities = new ArrayList<String>();
         private ArrayList<String> percentages = new ArrayList<String>();
+        private List<HashMap<String, String>> resultList = new ArrayList<HashMap<String, String>>();
 
+        private final String[] from = {"description", "percentage", "priority"};
+        private final int[] to = {R.id.description, R.id.percentage, R.id.priority};
         private int[] logos = new int[]{R.drawable.ic_action_cloud,
                 R.drawable.ic_action_dock, R.drawable.ic_launcher};
 
@@ -85,12 +91,20 @@ public class MyProjectListFrag extends Fragment {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
 
-            // ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-            // inflater.getContext(), android.R.layout.simple_list_item_1,
-            // numStrings);
-            // setListAdapter(adapter);
-            // return super.onCreateView(inflater, container,
-            // savedInstanceState);
+            resultList = getInfoFromPlanDB();
+            SimpleAdapter adapter = new SimpleAdapter(getActivity(), resultList,
+                    R.layout.frag_my_project_list_1, from, to);
+            setListAdapter(adapter);
+            return super.onCreateView(inflater, container, savedInstanceState);
+        }
+
+
+
+
+        /*
+        This function is used to check all entries from new plan db and return all the results to show them in the myprojectlist frag.
+         */
+        private List getInfoFromPlanDB() {
 
             myDBHelper = new MyDBHelper(getActivity(), MyDBConfiguration.AddNewPlanEntry.DB_NAME_STRING);
             mDatabase = myDBHelper.getReadableDatabase();
@@ -110,7 +124,7 @@ public class MyProjectListFrag extends Fragment {
             List<HashMap<String, String>> mList = new ArrayList<HashMap<String, String>>();
 
             DateFormat mDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            for (int i = 0; i < entryNum; i++){
+            for (int i = 0; i < entryNum; i++) {
                 Date startTime = null;
                 Date endTime = null;
                 int mPercentage;
@@ -127,15 +141,13 @@ public class MyProjectListFrag extends Fragment {
                 Long diffSE = endTime.getTime() - startTime.getTime();
                 Date currentTime = new Date();
                 Long diffCS = currentTime.getTime() - startTime.getTime();
-                if (currentTime.before(startTime) || endTime.before(startTime)){
+                if (currentTime.before(startTime) || endTime.before(startTime)) {
                     percentages.add("0%");
-                }
-                else if (currentTime.after(endTime)){
+                } else if (currentTime.after(endTime)) {
                     percentages.add("100%");
-                }
-                else {
+                } else {
                     mPercentage = (int) (diffCS * 100 / diffSE);
-                    percentages.add(mPercentage+"%");
+                    percentages.add(mPercentage + "%");
                 }
             }
 
@@ -148,14 +160,10 @@ public class MyProjectListFrag extends Fragment {
                 mList.add(mHashMap);
             }
 
-            String[] from = {"description", "percentage", "priority"};
-            int[] to = {R.id.description, R.id.percentage, R.id.priority};
+            return mList;
 
-            SimpleAdapter adapter = new SimpleAdapter(getActivity(), mList,
-                    R.layout.frag_my_project_list_1, from, to);
-            setListAdapter(adapter);
-            return super.onCreateView(inflater, container, savedInstanceState);
         }
+
 
         /*
          * register should be put here, after view created

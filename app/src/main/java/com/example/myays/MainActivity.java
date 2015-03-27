@@ -1,5 +1,6 @@
 package com.example.myays;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -133,7 +134,16 @@ public class MainActivity extends ActionBarActivity implements
 
 	}
 
-	private class DrawerItemClickListener implements
+    /*
+    Use this function to refresh fragments in viewpager
+     */
+    public void refreshViewPager(){
+        Log.i(TAG, "refresh view pager got called!!!!");
+        mViewPager.getAdapter().notifyDataSetChanged();
+
+    }
+
+    private class DrawerItemClickListener implements
 			ListView.OnItemClickListener {
 		@Override
 		public void onItemClick(AdapterView parent, View view, int position,
@@ -246,7 +256,6 @@ public class MainActivity extends ActionBarActivity implements
 		@Override
 		public Fragment getItem(int item_num) {
 
-			Log.i(TAG, "enter getItem");
 			switch (item_num) {
 			case MY_PROJECT_LIST_ID:
 				return new MyProjectListFrag();
@@ -254,8 +263,8 @@ public class MainActivity extends ActionBarActivity implements
 				return new TeamProjectListFrag();
 			case DISCOVER_PROJECT_LIST_ID:
 				return new DiscoverProjectListFrag();
-			default:
-				return new MyProjectListFrag();
+            default:
+                return new MyProjectListFrag();
 			}
 		}
 
@@ -264,7 +273,15 @@ public class MainActivity extends ActionBarActivity implements
 			return TAB_NUM;
 		}
 
-	}
+        /*
+        This method is used to refresh fragment in viewpager
+        It can only be triggered by method refreshViewPager() in MainActivity
+         */
+        @Override
+        public int getItemPosition(Object object) {
+            return POSITION_NONE;
+        }
+    }
 
 	@Override
 	public void onTabReselected(android.support.v7.app.ActionBar.Tab arg0,
@@ -286,4 +303,6 @@ public class MainActivity extends ActionBarActivity implements
 		// Auto-generated method stub
 
 	}
+
+
 }
