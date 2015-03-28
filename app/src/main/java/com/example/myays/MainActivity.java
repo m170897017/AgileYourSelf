@@ -55,7 +55,6 @@ public class MainActivity extends ActionBarActivity implements
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		mTitle = mDrawerTitle = getTitle();
 		mViewPager = (ViewPager) findViewById(R.id.pager);
 
 		// add tab to action bar here
@@ -138,11 +137,13 @@ public class MainActivity extends ActionBarActivity implements
     Use this function to refresh fragments in viewpager
      */
     public void refreshViewPager(){
-        Log.i(TAG, "refresh view pager got called!!!!");
         mViewPager.getAdapter().notifyDataSetChanged();
 
     }
 
+    /*
+    Do something when item in drawer navigation is pressed.
+     */
     private class DrawerItemClickListener implements
 			ListView.OnItemClickListener {
 		@Override
