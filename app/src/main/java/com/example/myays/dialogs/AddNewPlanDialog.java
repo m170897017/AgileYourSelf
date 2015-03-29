@@ -144,15 +144,6 @@ public class AddNewPlanDialog extends DialogFragment {
                                 updateDB();
                                 MainActivity mActivity = (MainActivity) getActivity();
                                 mActivity.refreshViewPager();
-
-//                                try {
-//
-//                                    Log.i(TAG, "get fragmanager success!!!!");
-//                                    ((MyProjectListFrag) getTargetFragment()).updateListView();
-//                                } catch (Exception e) {
-//                                    e.printStackTrace();
-//                                }
-
                             }
                         }
 

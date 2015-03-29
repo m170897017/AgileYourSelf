@@ -203,7 +203,7 @@ public class MainActivity extends ActionBarActivity implements
 		return super.onCreateOptionsMenu(menu);
 	}
 
-	private Intent getDefaultIntent() {
+	public Intent getDefaultIntent() {
 		Intent intent = new Intent(Intent.ACTION_SEND);
 		intent.setType("image/*");
 		return intent;

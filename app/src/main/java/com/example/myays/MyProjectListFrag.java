@@ -1,5 +1,6 @@
 package com.example.myays;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -8,6 +9,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.widget.ShareActionProvider;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -89,6 +92,7 @@ public class MyProjectListFrag extends Fragment {
         private Cursor mCursor;
         private TextView desView;
         private String descriptionOfLongPressItem;
+        private ShareActionProvider mShareActionProvider;
 
 
         @Override
@@ -160,14 +164,19 @@ public class MyProjectListFrag extends Fragment {
             switch (item.getItemId()) {
 
                 case R.id.item_action_share:
-                    Toast.makeText(getActivity(), "press share", Toast.LENGTH_LONG).show();
+                    startActivity(mMainActivity.getDefaultIntent());
+                    break;
                 case R.id.item_action_edit:
                     Toast.makeText(getActivity(), "press edit", Toast.LENGTH_LONG).show();
                     mMainActivity.refreshViewPager();
+                    break;
                 case R.id.item_action_delete:
                     Log.i(TAG, "we get description in selected: " + descriptionOfLongPressItem);
                     deleteItemFromDB(descriptionOfLongPressItem);
                     mMainActivity.refreshViewPager();
+                    break;
+                default:
+                    break;
             }
             return super.onContextItemSelected(item);
         }
