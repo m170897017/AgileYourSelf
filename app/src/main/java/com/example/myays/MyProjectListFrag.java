@@ -227,6 +227,8 @@ public class MyProjectListFrag extends Fragment {
                 endTimes.add(mCursor.getString(MyDBConfiguration.AddNewPlanEntry.COLUMN_NAME_END_TIME_ID));
                 priorities.add(mCursor.getString(MyDBConfiguration.AddNewPlanEntry.COLUMN_NAME_PRIORITY_ID));
 
+                String test = mCursor.getString(0);
+                Log.i(TAG, "we get ID is: "+test);
                 mCursor.moveToNext();
             }
             // Log.i(TAG, "this is description: " + descriptions + "\nthis is start time: " + startTimes + "\nthis is endtime: " + endTimes + "\nthis is priority: " + priorities);
