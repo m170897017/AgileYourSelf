@@ -32,6 +32,18 @@ public class AddNewPlanDialog extends DialogFragment {
     private static final String TAG = "lch";
     private MyDBHelper newPlanDbHelper;
 
+    protected String nameOfPlanString;
+    protected String startTimeString;
+    protected String endTimeString;
+    protected String pointString;
+    protected String priorityString;
+    protected String statusString;
+    protected String assignToString;
+    protected String descriptionString;
+    protected String noteString;
+    protected String alarmString;
+
+
     @Override
     @NonNull
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -169,56 +181,51 @@ public class AddNewPlanDialog extends DialogFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        Log.i(TAG, "ON ACTIVITY CALLED!!!");
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    /*
-     * Update database with input
-     */
-    public void updateDB() {
+    private ContentValues getContentFromPage(){
 
         EditText mNameEditText = (EditText) getDialog().findViewById(R.id.et_add_new_plan_name);
-        String nameOfPlanString = mNameEditText.getText().toString();
+        nameOfPlanString = mNameEditText.getText().toString();
 //		Log.i(TAG, "we get name: "+nameOfPlanString);
 
         Button mStartTimeButton = (Button) getDialog().findViewById(R.id.btn_add_new_plan_start_time);
-        String startTimeString = mStartTimeButton.getText().toString();
+        startTimeString = mStartTimeButton.getText().toString();
 //		Log.i(TAG, "we get start time: "+startTimeString);
 
         Button mEndTimeButton = (Button) getDialog().findViewById(R.id.btn_add_new_plan_end_time);
-        String endTimeString = mEndTimeButton.getText().toString();
+        endTimeString = mEndTimeButton.getText().toString();
 //		Log.i(TAG, "we get end time: "+endTimeString);
 
         EditText mPointEditText = (EditText) getDialog().findViewById(R.id.et_add_new_plan_point);
-        String pointString = mPointEditText.getText().toString();
+        pointString = mPointEditText.getText().toString();
 //		Log.i(TAG, "we get point: "+pointString);
 
         Button mPriorityButton = (Button) getDialog().findViewById(R.id.btn_add_new_plan_priority);
-        String priorityString = mPriorityButton.getText().toString();
+        priorityString = mPriorityButton.getText().toString();
 //		Log.i(TAG, "we get priority: "+priorityString);
 
         Button mStatusButton = (Button) getDialog().findViewById(R.id.btn_add_new_plan_status);
-        String statusString = mStatusButton.getText().toString();
+        statusString = mStatusButton.getText().toString();
 //		Log.i(TAG, "we get status: "+statusString);
 
         EditText mAssignToEditText = (EditText) getDialog().findViewById(R.id.et_add_new_plan_assign_to);
-        String assignToString = mAssignToEditText.getText().toString();
+        assignToString = mAssignToEditText.getText().toString();
 //		Log.i(TAG, "we get assign to: "+assignToString);
 
         EditText mDescriptionEditText = (EditText) getDialog().findViewById(R.id.et_add_new_plan_description);
-        String descriptionString = mDescriptionEditText.getText().toString();
+        descriptionString = mDescriptionEditText.getText().toString();
 //		Log.i(TAG, "we get description: "+descriptionString);
 
         EditText mNotesEditText = (EditText) getDialog().findViewById(R.id.et_add_new_plan_notes);
-        String noteString = mNotesEditText.getText().toString();
+        noteString = mNotesEditText.getText().toString();
 //		Log.i(TAG, "we get notes: "+noteString);
 
         Button mAlarmButton = (Button) getDialog().findViewById(R.id.btn_add_new_plan_alarm);
-        String alarmString = mAlarmButton.getText().toString();
+        alarmString = mAlarmButton.getText().toString();
 //		Log.i(TAG, "we get alarm: "+alarmString);
 
-        SQLiteDatabase newPlanDatabase = newPlanDbHelper.getWritableDatabase();
         ContentValues mContentValues = new ContentValues();
 
         mContentValues.put(AddNewPlanEntry.COLUMN_NAME_NAME, nameOfPlanString);
@@ -232,9 +239,21 @@ public class AddNewPlanDialog extends DialogFragment {
         mContentValues.put(AddNewPlanEntry.COLUMN_NAME_NOTES, noteString);
         mContentValues.put(AddNewPlanEntry.COLUMN_NAME_ALARM, alarmString);
 
+        return mContentValues;
+
+    }
+
+    /*
+     * Update database with input
+     */
+    protected void updateDB() {
+
+        ContentValues mContentValues = getContentFromPage();
+        SQLiteDatabase newPlanDatabase = newPlanDbHelper.getWritableDatabase();
         newPlanDatabase.insert(AddNewPlanEntry.TABLE_NAME, null, mContentValues);
 
 
+        /*
         // any record in database can be achieved here
         SQLiteDatabase readNewPlanDatabase = newPlanDbHelper.getReadableDatabase();
 
@@ -247,6 +266,7 @@ public class AddNewPlanDialog extends DialogFragment {
         String resString = mCursor.getString(1);
         Log.i(TAG, "we get column 1: " + resString);
         mCursor.close();
+*/
 
 
     }

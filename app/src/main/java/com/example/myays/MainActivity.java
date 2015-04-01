@@ -1,6 +1,5 @@
 package com.example.myays;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -14,14 +13,12 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.ShareActionProvider;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -31,17 +28,10 @@ public class MainActivity extends ActionBarActivity implements
 		ActionBar.TabListener {
 
 	private static final String TAG = "lch";
-	private MyProjectListAdapter mProjectListAdapter;
-	private ShareActionProvider mShareActionProvider;
-	private DrawerLayout mDrawerLayout;
-	private ListView mDrawerList;
-	private ActionBarDrawerToggle mActionBarDrawerToggle;
-	private String[] mNavigationDrawerListStrings;
-	private CharSequence mTitle = "this is mTitle";
+    private DrawerLayout mDrawerLayout;
+    private ActionBarDrawerToggle mActionBarDrawerToggle;
+    private CharSequence mTitle = "this is mTitle";
 	private CharSequence mDrawerTitle = "this is mDrawerTitle";
-	private AddNewPlanDialog mAddNewPlanDialog;
-	private AddNewPlanDialog mAddNewPlanDialogForPriority;
-	private Button mPriorityButton;
 
 	private ViewPager mViewPager;
 	private final static int TAB_NUM = 3;
@@ -58,8 +48,8 @@ public class MainActivity extends ActionBarActivity implements
 		mViewPager = (ViewPager) findViewById(R.id.pager);
 
 		// add tab to action bar here
-		mProjectListAdapter = new MyProjectListAdapter(
-				getSupportFragmentManager());
+        MyProjectListAdapter mProjectListAdapter = new MyProjectListAdapter(
+                getSupportFragmentManager());
 
 		final ActionBar mActionBar = getSupportActionBar();
 		mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
@@ -86,13 +76,13 @@ public class MainActivity extends ActionBarActivity implements
 				.setTabListener(this));
 
 		// now start to set navigation drawer
-		mNavigationDrawerListStrings = getResources().getStringArray(
-				R.array.navigation_drawer_array);
+        String[] mNavigationDrawerListStrings = getResources().getStringArray(
+                R.array.navigation_drawer_array);
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-		mDrawerList = (ListView) findViewById(R.id.left_drawer);
+        ListView mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
 		mDrawerList.setAdapter(new ArrayAdapter<String>(this,
-				R.layout.drawer_list_item, mNavigationDrawerListStrings));
+                R.layout.drawer_list_item, mNavigationDrawerListStrings));
 
 		mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
@@ -125,8 +115,8 @@ public class MainActivity extends ActionBarActivity implements
 	@Override
 	public void onBackPressed() {
 
-		if (mDrawerLayout.isDrawerOpen(Gravity.LEFT)) {
-			mDrawerLayout.closeDrawer(Gravity.LEFT);
+		if (mDrawerLayout.isDrawerOpen(Gravity.START)) {
+			mDrawerLayout.closeDrawer(Gravity.START);
 		} else {
 			super.onBackPressed();
 		}
@@ -196,8 +186,8 @@ public class MainActivity extends ActionBarActivity implements
 		getMenuInflater().inflate(R.menu.menu_for_my_projectlist, menu);
 
 		MenuItem shareItem = menu.findItem(R.id.action_share);
-		mShareActionProvider = (ShareActionProvider) MenuItemCompat
-				.getActionProvider(shareItem);
+        ShareActionProvider mShareActionProvider = (ShareActionProvider) MenuItemCompat
+                .getActionProvider(shareItem);
 
 		mShareActionProvider.setShareIntent(getDefaultIntent());
 		return super.onCreateOptionsMenu(menu);
@@ -228,21 +218,18 @@ public class MainActivity extends ActionBarActivity implements
 					.show();
 			break;
 		case R.id.action_add_new_plan:
-			AddNewPlanDialog mAddNewPlanDialog = new AddNewPlanDialog();
+            AddNewPlanDialog mAddNewPlanDialog = new AddNewPlanDialog();
 			mAddNewPlanDialog.show(getSupportFragmentManager(),
-					"addNewPlanDialog");
+                    "addNewPlanDialog");
 			break;
 		default:
 			break;
 
 		}
 
-		if (mActionBarDrawerToggle.onOptionsItemSelected(item)) {
-			return true;
-		}
+        return mActionBarDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
 
-		return super.onOptionsItemSelected(item);
-	}
+    }
 
 	/*
 	 * FragmentPagerAdapter has to use android.support.v4.app.FragmentManager as

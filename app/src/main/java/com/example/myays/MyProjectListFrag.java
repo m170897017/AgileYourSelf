@@ -1,15 +1,13 @@
 package com.example.myays;
 
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.media.MediaCrypto;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.ShareActionProvider;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -40,10 +38,6 @@ public class MyProjectListFrag extends Fragment {
 
     private final static String TAG = "lch";
 
-    private MyProjectListFragment myProjectListFragment;
-    private FragmentManager mFragmentManager;
-    private FragmentTransaction mFragmentTransaction;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -62,8 +56,8 @@ public class MyProjectListFrag extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mFragmentManager = getFragmentManager();
-        myProjectListFragment = new MyProjectListFragment();
+        FragmentManager mFragmentManager = getFragmentManager();
+        MyProjectListFragment myProjectListFragment = new MyProjectListFragment();
         mFragmentManager
                 .beginTransaction()
                 .replace(R.id.container_for_my_pro_list, myProjectListFragment,
@@ -83,8 +77,6 @@ public class MyProjectListFrag extends Fragment {
 
         private final String[] from = {"description", "percentage", "priority"};
         private final int[] to = {R.id.description, R.id.percentage, R.id.priority};
-        private int[] logos = new int[]{R.drawable.ic_action_cloud,
-                R.drawable.ic_action_dock, R.drawable.ic_launcher};
 
 
         private MyDBHelper myDBHelper;
@@ -92,7 +84,6 @@ public class MyProjectListFrag extends Fragment {
         private Cursor mCursor;
         private TextView desView;
         private String descriptionOfLongPressItem;
-        private ShareActionProvider mShareActionProvider;
 
 
         @Override
@@ -168,10 +159,10 @@ public class MyProjectListFrag extends Fragment {
                     break;
                 case R.id.item_action_edit:
                     Toast.makeText(getActivity(), "press edit", Toast.LENGTH_LONG).show();
+                    updateItemInDB(descriptionOfLongPressItem);
                     mMainActivity.refreshViewPager();
                     break;
                 case R.id.item_action_delete:
-                    Log.i(TAG, "we get description in selected: " + descriptionOfLongPressItem);
                     deleteItemFromDB(descriptionOfLongPressItem);
                     mMainActivity.refreshViewPager();
                     break;
@@ -179,6 +170,31 @@ public class MyProjectListFrag extends Fragment {
                     break;
             }
             return super.onContextItemSelected(item);
+        }
+
+        private void updateItemInDB(String description) {
+
+            myDBHelper = new MyDBHelper(getActivity(), MyDBConfiguration.AddNewPlanEntry.DB_NAME_STRING);
+            mDatabase = myDBHelper.getReadableDatabase();
+            String selection = MyDBConfiguration.AddNewPlanEntry.COLUMN_NAME_DESCRIPTION + "=?";
+            String[] selectionArgs = {description};
+            mCursor = mDatabase.query(MyDBConfiguration.AddNewPlanEntry.TABLE_NAME, null, selection, selectionArgs, null, null, null);
+
+            mCursor.moveToFirst();
+            String entryName = mCursor.getString(MyDBConfiguration.AddNewPlanEntry.COLUMN_NAME_NAME_ID);
+            String entryStartTime = mCursor.getString(MyDBConfiguration.AddNewPlanEntry.COLUMN_NAME_START_TIME_ID);
+            String entryEndTime = mCursor.getString(MyDBConfiguration.AddNewPlanEntry.COLUMN_NAME_END_TIME_ID);
+            String entryPoints = mCursor.getString(MyDBConfiguration.AddNewPlanEntry.COLUMN_NAME_POINT_ID);
+            String entryPriority = mCursor.getString(MyDBConfiguration.AddNewPlanEntry.COLUMN_NAME_PRIORITY_ID);
+            String entryStatus = mCursor.getString(MyDBConfiguration.AddNewPlanEntry.COLUMN_NAME_STATUS_ID);
+            String entryAssignTo = mCursor.getString(MyDBConfiguration.AddNewPlanEntry.COLUMN_NAME_ASSIGN_TO_ID);
+            String entryDescription = mCursor.getString(MyDBConfiguration.AddNewPlanEntry.COLUMN_NAME_DESCRIPTION_ID);
+            String entryNotes = mCursor.getString(MyDBConfiguration.AddNewPlanEntry.COLUMN_NAME_NOTES_ID);
+            String entryAlarm = mCursor.getString(MyDBConfiguration.AddNewPlanEntry.COLUMN_NAME_ALARM_ID);
+
+
+
+
         }
 
         /*
