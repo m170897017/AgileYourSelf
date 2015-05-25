@@ -30,8 +30,6 @@ public class MainActivity extends ActionBarActivity implements
 	private static final String TAG = "lch";
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mActionBarDrawerToggle;
-    private CharSequence mTitle = "this is mTitle";
-	private CharSequence mDrawerTitle = "this is mDrawerTitle";
 
 	private ViewPager mViewPager;
 	private final static int TAB_NUM = 3;
@@ -93,13 +91,11 @@ public class MainActivity extends ActionBarActivity implements
 			@Override
 			public void onDrawerClosed(View drawerView) {
 				super.onDrawerClosed(drawerView);
-				getSupportActionBar().setTitle(mTitle);
 			}
 
 			@Override
 			public void onDrawerOpened(View drawerView) {
 				super.onDrawerOpened(drawerView);
-				getSupportActionBar().setTitle(mDrawerTitle);
 			}
 
 		};
