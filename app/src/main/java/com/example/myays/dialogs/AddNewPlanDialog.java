@@ -17,12 +17,15 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.example.myays.MainActivity;
 import com.example.myays.MyProjectListFrag;
 import com.example.myays.R;
 import com.example.myays.databases.MyDBConfiguration.AddNewPlanEntry;
 import com.example.myays.databases.MyDBHelper;
+
+import org.w3c.dom.Text;
 
 import java.text.DateFormat;
 import java.util.Date;
@@ -31,6 +34,7 @@ public class AddNewPlanDialog extends DialogFragment {
 
     private static final String TAG = "lch";
     private MyDBHelper newPlanDbHelper;
+    private Bundle mBundle;
 
     protected String nameOfPlanString;
     protected String startTimeString;
@@ -52,7 +56,29 @@ public class AddNewPlanDialog extends DialogFragment {
         LayoutInflater mInflater = getActivity().getLayoutInflater();
         newPlanDbHelper = new MyDBHelper(getActivity(), AddNewPlanEntry.DB_NAME_STRING);
 
+        mBundle = getArguments();
+        if (mBundle.isEmpty() != false){
+            nameOfPlanString = mBundle.getString("entryName");
+            startTimeString = mBundle.getString("entryStartTime");
+            endTimeString = mBundle.getString("entryEndTime");
+            pointString = mBundle.getString("entryPoints");
+            priorityString = mBundle.getString("entryPriority");
+            statusString = mBundle.getString("entryStatus");
+            assignToString = mBundle.getString("entryAssignTo");
+            descriptionString = mBundle.getString("entryDescription");
+            noteString = mBundle.getString("entryNotes");
+            alarmString = mBundle.getString("entryAlarm");
+        }
+
+
+
         View mView = mInflater.inflate(R.layout.frag_add_new_plan_dialog, null);
+        EditText mNameOfPlanET = (EditText) mView.findViewById(R.id.et_add_new_plan_name);
+        EditText mPointsET = (EditText) mView.findViewById(R.id.et_add_new_plan_point);
+        EditText mAssignToET = (EditText) mView.findViewById(R.id.et_add_new_plan_assign_to);
+        EditText mDescriptionET = (EditText) mView.findViewById(R.id.et_add_new_plan_description);
+        EditText mNotesET = (EditText) mView.findViewById(R.id.et_add_new_plan_notes);
+
         Button mStartTimeButton = (Button) mView
                 .findViewById(R.id.btn_add_new_plan_start_time);
         Button mEndTimeButton = (Button) mView
@@ -63,6 +89,16 @@ public class AddNewPlanDialog extends DialogFragment {
                 .findViewById(R.id.btn_add_new_plan_priority);
         Button mStatusButton = (Button) mView
                 .findViewById(R.id.btn_add_new_plan_status);
+
+        // set text to arguments if they exist
+        if (nameOfPlanString.isEmpty() != false){
+            mNameOfPlanET.setText(nameOfPlanString);
+        }
+
+        if (pointString.isEmpty() != false){
+            mPointsET.setText(pointString);
+        }
+
 
         // update priority of plan
         mPriorityButton.setOnClickListener(new OnClickListener() {
@@ -284,7 +320,7 @@ public class AddNewPlanDialog extends DialogFragment {
     }
 
     /*
-     * To update status of plan
+     * Callback interface used by addNewPlanStatusDialog to update status of plan
      */
     public void updateStatus(String status) {
         Button mButton = (Button) getDialog().findViewById(

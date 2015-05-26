@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import com.example.myays.databases.MyDBConfiguration;
 import com.example.myays.databases.MyDBHelper;
+import com.example.myays.dialogs.AddNewPlanDialog;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -84,6 +85,7 @@ public class MyProjectListFrag extends Fragment {
         private Cursor mCursor;
         private TextView desView;
         private String descriptionOfLongPressItem;
+        private AddNewPlanDialog mAddNewPlanDialog;
 
 
         @Override
@@ -172,6 +174,9 @@ public class MyProjectListFrag extends Fragment {
             return super.onContextItemSelected(item);
         }
 
+        /*
+        Update item in DB according to user choice
+         */
         private void updateItemInDB(String description) {
 
             myDBHelper = new MyDBHelper(getActivity(), MyDBConfiguration.AddNewPlanEntry.DB_NAME_STRING);
@@ -192,8 +197,20 @@ public class MyProjectListFrag extends Fragment {
             String entryNotes = mCursor.getString(MyDBConfiguration.AddNewPlanEntry.COLUMN_NAME_NOTES_ID);
             String entryAlarm = mCursor.getString(MyDBConfiguration.AddNewPlanEntry.COLUMN_NAME_ALARM_ID);
 
-
-
+            mAddNewPlanDialog = new AddNewPlanDialog();
+            Bundle mBundle = new Bundle();
+            mBundle.putString("entryName", entryName);
+            mBundle.putSerializable("entryStartTime", entryStartTime);
+            mBundle.putString("entryEndTime", entryEndTime);
+            mBundle.putString("entryPoints", entryPoints);
+            mBundle.putString("entryPriority", entryPriority);
+            mBundle.putString("entryStatus", entryStatus);
+            mBundle.putString("entryAssignTo", entryAssignTo);
+            mBundle.putString("entryDescription", entryDescription);
+            mBundle.putString("entryNotes", entryNotes);
+            mBundle.putString("entryAlarm", entryAlarm);
+            mAddNewPlanDialog.setArguments(mBundle);
+            mAddNewPlanDialog.show(getFragmentManager(), "this is dialog for update.");
 
         }
 
