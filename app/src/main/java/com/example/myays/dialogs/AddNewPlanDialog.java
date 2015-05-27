@@ -56,22 +56,6 @@ public class AddNewPlanDialog extends DialogFragment {
         LayoutInflater mInflater = getActivity().getLayoutInflater();
         newPlanDbHelper = new MyDBHelper(getActivity(), AddNewPlanEntry.DB_NAME_STRING);
 
-        mBundle = getArguments();
-        if (mBundle.isEmpty() != false){
-            nameOfPlanString = mBundle.getString("entryName");
-            startTimeString = mBundle.getString("entryStartTime");
-            endTimeString = mBundle.getString("entryEndTime");
-            pointString = mBundle.getString("entryPoints");
-            priorityString = mBundle.getString("entryPriority");
-            statusString = mBundle.getString("entryStatus");
-            assignToString = mBundle.getString("entryAssignTo");
-            descriptionString = mBundle.getString("entryDescription");
-            noteString = mBundle.getString("entryNotes");
-            alarmString = mBundle.getString("entryAlarm");
-        }
-
-
-
         View mView = mInflater.inflate(R.layout.frag_add_new_plan_dialog, null);
         EditText mNameOfPlanET = (EditText) mView.findViewById(R.id.et_add_new_plan_name);
         EditText mPointsET = (EditText) mView.findViewById(R.id.et_add_new_plan_point);
@@ -90,14 +74,52 @@ public class AddNewPlanDialog extends DialogFragment {
         Button mStatusButton = (Button) mView
                 .findViewById(R.id.btn_add_new_plan_status);
 
-        // set text to arguments if they exist
-        if (nameOfPlanString.isEmpty() != false){
-            mNameOfPlanET.setText(nameOfPlanString);
+
+        mBundle = getArguments();
+        if (!mBundle.isEmpty()){
+            if (mBundle.containsKey("entryName")) {
+                nameOfPlanString = mBundle.getString("entryName");
+                mNameOfPlanET.setText(nameOfPlanString);
+            }
+            if (mBundle.containsKey("entryStartTime")) {
+                startTimeString = mBundle.getString("entryStartTime");
+                mStartTimeButton.setText(startTimeString);
+            }
+            if (mBundle.containsKey("entryEndTime")) {
+                endTimeString = mBundle.getString("entryEndTime");
+                mEndTimeButton.setText(endTimeString);
+            }
+            if (mBundle.containsKey("entryPoints")) {
+                pointString = mBundle.getString("entryPoints");
+                mPointsET.setText(pointString);
+            }
+            if (mBundle.containsKey("entryPriority")) {
+                priorityString = mBundle.getString("entryPriority");
+                mPriorityButton.setText(priorityString);
+            }
+            if (mBundle.containsKey("entryStatus")) {
+                statusString = mBundle.getString("entryStatus");
+                mStatusButton.setText(statusString);
+            }
+            if (mBundle.containsKey("entryAssignTo")) {
+                assignToString = mBundle.getString("entryAssignTo");
+                mAssignToET.setText(assignToString);
+            }
+            if (mBundle.containsKey("entryDescription")) {
+                descriptionString = mBundle.getString("entryDescription");
+                mDescriptionET.setText(descriptionString);
+            }
+            if (mBundle.containsKey("entryNostes")) {
+                noteString = mBundle.getString("entryNotes");
+                mNotesET.setText(noteString);
+            }
+            if (mBundle.containsKey("entryAlarm")) {
+                alarmString = mBundle.getString("entryAlarm");
+                mAlarmButton.setText(alarmString);
+            }
+
         }
 
-        if (pointString.isEmpty() != false){
-            mPointsET.setText(pointString);
-        }
 
 
         // update priority of plan
@@ -334,8 +356,7 @@ public class AddNewPlanDialog extends DialogFragment {
      */
     public void updateTime(int year, int month, int day, int whichButton) {
 
-        month++;
-        String currentDateString = year + "-" + month + "-" + day;
+        String currentDateString = year + "-" + ++month + "-" + day;
 
         switch (whichButton) {
             case 1:

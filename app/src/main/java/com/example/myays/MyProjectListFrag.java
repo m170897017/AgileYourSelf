@@ -179,39 +179,67 @@ public class MyProjectListFrag extends Fragment {
          */
         private void updateItemInDB(String description) {
 
-            myDBHelper = new MyDBHelper(getActivity(), MyDBConfiguration.AddNewPlanEntry.DB_NAME_STRING);
-            mDatabase = myDBHelper.getReadableDatabase();
-            String selection = MyDBConfiguration.AddNewPlanEntry.COLUMN_NAME_DESCRIPTION + "=?";
-            String[] selectionArgs = {description};
-            mCursor = mDatabase.query(MyDBConfiguration.AddNewPlanEntry.TABLE_NAME, null, selection, selectionArgs, null, null, null);
+            try {
 
-            mCursor.moveToFirst();
-            String entryName = mCursor.getString(MyDBConfiguration.AddNewPlanEntry.COLUMN_NAME_NAME_ID);
-            String entryStartTime = mCursor.getString(MyDBConfiguration.AddNewPlanEntry.COLUMN_NAME_START_TIME_ID);
-            String entryEndTime = mCursor.getString(MyDBConfiguration.AddNewPlanEntry.COLUMN_NAME_END_TIME_ID);
-            String entryPoints = mCursor.getString(MyDBConfiguration.AddNewPlanEntry.COLUMN_NAME_POINT_ID);
-            String entryPriority = mCursor.getString(MyDBConfiguration.AddNewPlanEntry.COLUMN_NAME_PRIORITY_ID);
-            String entryStatus = mCursor.getString(MyDBConfiguration.AddNewPlanEntry.COLUMN_NAME_STATUS_ID);
-            String entryAssignTo = mCursor.getString(MyDBConfiguration.AddNewPlanEntry.COLUMN_NAME_ASSIGN_TO_ID);
-            String entryDescription = mCursor.getString(MyDBConfiguration.AddNewPlanEntry.COLUMN_NAME_DESCRIPTION_ID);
-            String entryNotes = mCursor.getString(MyDBConfiguration.AddNewPlanEntry.COLUMN_NAME_NOTES_ID);
-            String entryAlarm = mCursor.getString(MyDBConfiguration.AddNewPlanEntry.COLUMN_NAME_ALARM_ID);
 
-            mAddNewPlanDialog = new AddNewPlanDialog();
-            Bundle mBundle = new Bundle();
-            mBundle.putString("entryName", entryName);
-            mBundle.putSerializable("entryStartTime", entryStartTime);
-            mBundle.putString("entryEndTime", entryEndTime);
-            mBundle.putString("entryPoints", entryPoints);
-            mBundle.putString("entryPriority", entryPriority);
-            mBundle.putString("entryStatus", entryStatus);
-            mBundle.putString("entryAssignTo", entryAssignTo);
-            mBundle.putString("entryDescription", entryDescription);
-            mBundle.putString("entryNotes", entryNotes);
-            mBundle.putString("entryAlarm", entryAlarm);
-            mAddNewPlanDialog.setArguments(mBundle);
-            mAddNewPlanDialog.show(getFragmentManager(), "this is dialog for update.");
+                myDBHelper = new MyDBHelper(getActivity(), MyDBConfiguration.AddNewPlanEntry.DB_NAME_STRING);
+                mDatabase = myDBHelper.getReadableDatabase();
+                String selection = MyDBConfiguration.AddNewPlanEntry.COLUMN_NAME_DESCRIPTION + "=?";
+                String[] selectionArgs = {description};
+                mCursor = mDatabase.query(MyDBConfiguration.AddNewPlanEntry.TABLE_NAME, null, selection, selectionArgs, null, null, null);
 
+                mCursor.moveToFirst();
+                String entryName = mCursor.getString(MyDBConfiguration.AddNewPlanEntry.COLUMN_NAME_NAME_ID);
+                String entryStartTime = mCursor.getString(MyDBConfiguration.AddNewPlanEntry.COLUMN_NAME_START_TIME_ID);
+                String entryEndTime = mCursor.getString(MyDBConfiguration.AddNewPlanEntry.COLUMN_NAME_END_TIME_ID);
+                String entryPoints = mCursor.getString(MyDBConfiguration.AddNewPlanEntry.COLUMN_NAME_POINT_ID);
+                String entryPriority = mCursor.getString(MyDBConfiguration.AddNewPlanEntry.COLUMN_NAME_PRIORITY_ID);
+                String entryStatus = mCursor.getString(MyDBConfiguration.AddNewPlanEntry.COLUMN_NAME_STATUS_ID);
+                String entryAssignTo = mCursor.getString(MyDBConfiguration.AddNewPlanEntry.COLUMN_NAME_ASSIGN_TO_ID);
+                String entryDescription = mCursor.getString(MyDBConfiguration.AddNewPlanEntry.COLUMN_NAME_DESCRIPTION_ID);
+                String entryNotes = mCursor.getString(MyDBConfiguration.AddNewPlanEntry.COLUMN_NAME_NOTES_ID);
+                String entryAlarm = mCursor.getString(MyDBConfiguration.AddNewPlanEntry.COLUMN_NAME_ALARM_ID);
+
+                mAddNewPlanDialog = new AddNewPlanDialog();
+                Bundle mBundle = new Bundle();
+                if (!entryName.isEmpty()){
+                    mBundle.putString("entryName", entryName);
+                }
+                if (!entryStartTime.isEmpty()){
+                    mBundle.putSerializable("entryStartTime", entryStartTime);
+                }
+                if (!entryEndTime.isEmpty()){
+                    mBundle.putString("entryEndTime", entryEndTime);
+                }
+                if (!entryPoints.isEmpty()) {
+                    mBundle.putString("entryPoints", entryPoints);
+                }
+                if (!entryPoints.isEmpty()) {
+                    mBundle.putString("entryPriority", entryPriority);
+                }
+                if (!entryStatus.isEmpty()) {
+                    mBundle.putString("entryStatus", entryStatus);
+                }
+                if (!entryAssignTo.isEmpty()) {
+                    mBundle.putString("entryAssignTo", entryAssignTo);
+                }
+                if (!entryDescription.isEmpty()) {
+                    mBundle.putString("entryDescription", entryDescription);
+                }
+                if (!entryNotes.isEmpty()) {
+                    mBundle.putString("entryNotes", entryNotes);
+                }
+                if (!entryAlarm.isEmpty()) {
+                    mBundle.putString("entryAlarm", entryAlarm);
+                }
+
+                Log.i(TAG, "now start to show edit dialog");
+
+                mAddNewPlanDialog.setArguments(mBundle);
+                mAddNewPlanDialog.show(getFragmentManager(), "this is dialog for update.");
+            }catch (Exception e){
+                e.printStackTrace();
+            }
         }
 
         /*
