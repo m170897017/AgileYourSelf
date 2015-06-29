@@ -29,6 +29,7 @@ public class MainActivity extends ActionBarActivity implements
 
 	private static final String TAG = "lch";
     private DrawerLayout mDrawerLayout;
+	private ListView mDrawerList;
     private ActionBarDrawerToggle mActionBarDrawerToggle;
 
 	private ViewPager mViewPager;
@@ -52,6 +53,7 @@ public class MainActivity extends ActionBarActivity implements
 		final ActionBar mActionBar = getSupportActionBar();
 		mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
+        // add view pager to switch between tabs
 		mViewPager.setAdapter(mProjectListAdapter);
 		mViewPager
 				.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
@@ -73,17 +75,20 @@ public class MainActivity extends ActionBarActivity implements
 		mActionBar.addTab(mActionBar.newTab().setText("Discover")
 				.setTabListener(this));
 
-		// now start to set navigation drawer
+		// ### now start to set navigation drawer
+
+		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerList = (ListView) findViewById(R.id.left_drawer);
+
+        // set list view action
         String[] mNavigationDrawerListStrings = getResources().getStringArray(
                 R.array.navigation_drawer_array);
-		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ListView mDrawerList = (ListView) findViewById(R.id.left_drawer);
-
 		mDrawerList.setAdapter(new ArrayAdapter<String>(this,
                 R.layout.drawer_list_item, mNavigationDrawerListStrings));
 
 		mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
+        // set drawer view action
 		mActionBarDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
 				R.drawable.ic_drawer, R.string.drawer_open,
 				R.string.drawer_close) {
@@ -101,6 +106,8 @@ public class MainActivity extends ActionBarActivity implements
 		};
 		mDrawerLayout.setDrawerListener(mActionBarDrawerToggle);
 
+        // ### end of set navigation drawer
+
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		getSupportActionBar().setHomeButtonEnabled(true);
 
@@ -116,7 +123,6 @@ public class MainActivity extends ActionBarActivity implements
 		} else {
 			super.onBackPressed();
 		}
-
 	}
 
     /*
